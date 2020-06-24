@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const DOMAIN = 'http://localhost/';
-//const DOMAIN = '/'; // 배포시 변경함
+//const DOMAIN = 'http://localhost/';
+const DOMAIN = '/'; // 배포시 변경함
 
 const request = (method, url, data) => {
   return axios({
