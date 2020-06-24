@@ -1,32 +1,54 @@
-/**
- * 트위치 스트리머 정보 서버스 모델 -- 예정 ) 스트리머 팔로워 시청수 관련 기능추가
- */
+module.exports = (sequelize, DataTypes) => {
+  const Streamer = sequelize.define('streamer', {
+      loginId: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          description : '로그인등에 사용되는 아이디'
+      },
+      userId: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          description : '트위치 내부에서 사용되는 아이디 api 호출시 알아야 하는 정보'
+      },
+      userName: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          description : '트위치 닉네임'
+      },
+      offlineImg : {
+          type: DataTypes.STRING,
+          allowNull: false,
+          description : '트위치 오프라인이미지'
+      },
+      profileImg : {
+          type: DataTypes.STRING,
+          allowNull: false,
+          description : '트위치 프로필이미지'
+      },
+      fllower: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          defaultValue : 0,
+          description : '팔오워숫자'
+      },
+      views: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          defaultValue : 0,
+          description : '전체 뷰숫자'
+      },
+      live : {
+          type: DataTypes.BOOLEAN,
+          allowNull: false,
+          defaultValue : 0,
+          description : '라이브유무'
+      }
+  }, 
+  {indexes : [{fields:['loginId']}]},
+  {
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_general_ci',
+  });
 
-const db = require('../schema/index');
-const logger = require('../config/logger');
-
-class StreamerModel{
-   /**
-   * 상품정보목록조회
-   * @param name{string} 스트리머이름
-   * @return promise.<list>
-   */
-  static async getStreamerList(name){
-    try {
-      const list = await db.Streamer.findAll({
-        where : {
-          userName : {
-            [db.Sequelize.Op.like] : `%${name}%`
-          }
-        }
-      });
-      console.log(list);
-      
-      return list;
-    } catch (error) {
-      logger.error(error);
-    }
-  }
-}
-
-module.exports = StreamerModel;
+  return Streamer;
+};

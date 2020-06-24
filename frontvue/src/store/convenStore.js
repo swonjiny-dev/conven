@@ -19,6 +19,7 @@ const convenStore = {
     SET_PRODUCT_LIST(state , list){
       state.productList = state.productList.concat(list);
     },
+
     SET_PRODUCT_TOTAL(state , total){
       state.prodTotal = total;
     },
@@ -36,6 +37,17 @@ const convenStore = {
         commit('SET_PRODUCT_TOTAL' , list.count);
       } catch (error) {
         console.error(error);
+        commit('SET_SNACKBAR_SETING',{ msg :error.data.message , color:'yellow'}, { root: true });
+      }
+    },
+
+    async PATCH_CATEGORY({commit} , item){
+      try {
+         await api.convenInfo.updateCategory(item.id , item.category);
+      } catch (error) {
+        console.error(error);
+        await commit('SET_SNACKBAR_SETING',{ msg :error.data.message , color:'yellow'}, { root: true });
+        throw error
       }
     }
   }

@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import twitchStore from './twitchStore'
 import convenStore from "./convenStore";
+import authStore from "./authStore";
+import * as api from "../api/request";
 
 Vue.use(Vuex);
 
@@ -26,9 +28,20 @@ export default new Vuex.Store({
     },
   },
   getters : {},
-  actions : {},
+  actions : {
+    LOGIN({commit}, { email, password}) {
+      return api.auth.login(email, password)
+      .then(({accessToken}) => {
+          commit('LOGIN', accessToken);
+      })
+      .catch(error=>{
+        commit('SET_SNACKBAR_SETING', error.data.error , 'red');
+      })
+    },
+  },
   modules: {
     twitchStore,
-    convenStore
+    convenStore,
+    authStore
   }
 })

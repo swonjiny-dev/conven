@@ -39,11 +39,13 @@
 </template>
 
 <script>
+import { conven } from "@/mixins/conven";
 import searchBottom  from "@/components/conven/searchBottom.vue";
 import itemCard  from "@/components/conven/itemCard.vue";
 import addCard  from "@/components/conven/addCard.vue";
 import { mapMutations , mapActions } from 'vuex'
 export default {
+  mixins: [conven],
   created() {
     document.title = "편의점";
     this.plist();
@@ -64,28 +66,12 @@ export default {
   },
 
   computed: {
+    // 더보기 버튼 처리 - 조회될 데이터 수량 확인후 더보기 버튼 사라지도록함
     addBtnflag(){
       if(this.$store.state.convenStore.productList.length === this.$store.state.convenStore.prodTotal ){
         return false
       }else return true
     },
-    productList(){
-      let list = this.$store.state.convenStore.productList;
-      if(list){
-        list = list.map((item)=>{
-          let color = '#fff';
-          if(item.brand == 'cu') color = 'purple darken-3';
-          if(item.brand == 'gs') color = 'blue darken-2';
-          if(item.brand == 'mini') color = 'yellow darken-1';
-          if(item.brand == 'emart24') color = 'amber darken-2';
-          if(item.brand == 'seven') color = 'green darken-4';
-          const reitem = {...item , color }
-          return reitem;
-        });
-      }
-      return list;
-    },
-
     selectedAllShop () {
       return this.shopSelect.length === this.shopItems.length
     },
@@ -103,7 +89,9 @@ export default {
     ...mapMutations('convenStore' , [
       'SET_STATE_INIT'
     ]),
-
+    ...mapMutations([
+      'SET_SNACKBAR_SETING',
+    ]),
     ...mapActions('convenStore' ,{
       plist : 'FETCH_PRODUCT_LIST'}
     ),

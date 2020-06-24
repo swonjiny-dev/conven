@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import ConvenView from '../views/ConvenView'
 import MultiTwitchView from "../views/MultiTwitchView";
+import ConvenEditView from "../views/ConvenEditView";
+import LoginView from "../views/LoginView";
 
 Vue.use(VueRouter)
 
@@ -12,10 +14,20 @@ Vue.use(VueRouter)
     component: ConvenView,
   },
   {
+    path: '/conEdit',
+    name: 'cEdit',
+    component: ConvenEditView,
+  },
+  {
     path: '/twitch',
     name: 'About',
     component: MultiTwitchView,
   },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView,
+   },
   {
     path : '*',
     redirect : '/conven'

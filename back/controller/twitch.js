@@ -3,7 +3,7 @@
  * @author swonjiny.dev@gmail.com
  */
 
-const StreamerModel =  require('../models/streamer');
+const StreamerModel =  require('../service/streamer');
 const logger = require('../config/logger');
 class TwitchController{
   /**

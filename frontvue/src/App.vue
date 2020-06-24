@@ -7,7 +7,7 @@
 		<AppFooter></AppFooter>
     <v-snackbar
       v-model="snackbarFlag"
-      :timeout="timeout"
+   
       top
     >
       {{ snackbarMsg }}
@@ -59,7 +59,7 @@ export default {
 
   },
   data: () => ({
-    timeout: 3000,
+  
   }),
   methods: {
     ...mapMutations([

@@ -1,67 +1,64 @@
 /**
- * 상품정보조회 서버스 모델
+ * 편의점 상품정보
  */
 
-const db = require('../schema/index');
-const logger = require('../config/logger');
-
-class ProductModel{
-  /**
-   * 상품정보목록조회
-   * @param brand{array} 브랜드
-   * @param category{array} 삼품카테고리
-   * @param eventType{array} 1+1 2+1 3+1
-   * @param title{String} 상품명
-   * @param size{number} 목록갯수
-   * @param offset{number} 목록시작 위치
-   * @param order{array} orderby 정렬조건
-   * @return promise.<list>
-   */
-  static async getProdList(brand , category , eventType , title , size , offset, orderby){    
-    try {
-      // 시퀄라이져 where 객체
-      let whereObject = {};
-      let order = [];
-
-      if(brand) {
-        whereObject.brand = {
-          [db.Sequelize.Op.or] : brand
-        };
-      }
-
-      if(category) {
-        whereObject.category = {
-          [db.Sequelize.Op.or] : category
-        };
-      }
-
-      if(eventType){
-        whereObject.eventType = {
-          [db.Sequelize.Op.or] : eventType
-        };
-      } 
-      
-      if(title) {
-        whereObject.title = {
-          [db.Sequelize.Op.like] : `%${title}%`, 
-        };
-      }
-      if(orderby){
-        order = [orderby]
-      }else order = [];
-    
-      const list = await db.Product.findAndCountAll({
-       where  : whereObject,
-       offset,
-       limit : size,
-       order
-      });
-      return list;
-    } catch (error) {
-      logger.error(error)
+module.exports = (sequelize, DataTypes) => {
+  const Product = sequelize.define('tb_product',{
+    brand : {
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment : '브랜드'
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment : '상품명'
+    },
+    price : {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      comment : '판매가격'
+    },
+    imageUrl : {
+      type: DataTypes.STRING,
+      allowNull: true,
+      comment : '이미지 URL'
+    },
+    eventType : {
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment : '1+1 1+2 구분'
+    },
+    category : {
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment : '음료 간편식 기타'
     }
+  },
+  {
+    indexes : [
+      { 
+        name : 'idx_product_title',
+        fields:['title']
+      },
+      { 
+        name : 'idx_product_eventType',
+        fields:['eventType']
+      },
+      {   
+        name : 'idx_product_category',
+        fields:['category']
+      },
+      {   
+        name : 'idx_product_brand',
+        fields:['brand']
+      },
+    ]
+  }, 
+  {
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_general_ci',
   }
-
-}
-
-module.exports = ProductModel;
+  );  
+  return Product;
+};
